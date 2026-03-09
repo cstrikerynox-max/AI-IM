@@ -1,478 +1,278 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Süni İntellekt Yaradıcısı - AZ Studio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --purple-main: #330055;
-            --purple-light: #5a0099;
-            --purple-button: #7b00cc;
-            --text-color: #f1f1f1;
-            --transition: all 0.3s ease-out;
-        }
+<meta charset="UTF-8">
+<title>Cute AI Generator</title>
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-color);
-            background-color: var(--purple-main);
-            background-image: linear-gradient(rgba(51, 0, 85, 0.8), rgba(51, 0, 85, 0.9)),
-                              url('https://cdn.pixabay.com/photo/2023/12/11/14/08/anime-8443585_1280.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
+<style>
 
-        /* Sidebar - Sol tərəf */
-        .sidebar {
-            width: 80px;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 30px;
-            border-right: 2px solid var(--purple-button);
-            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-            transition: var(--transition);
-        }
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(120deg,#4b0082,#8a2be2);
+color:white;
+overflow:hidden;
+}
 
-        .sidebar-item {
-            font-size: 28px;
-            color: #bdc3c7;
-            margin-bottom: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-            text-align: center;
-            padding: 10px 0;
-        }
+#app{
+display:flex;
+height:100vh;
+}
 
-        .sidebar-item:hover {
-            color: white;
-            background: rgba(123, 0, 204, 0.3);
-            border-radius: 5px;
-        }
+.sidebar{
+width:230px;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(10px);
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:15px;
+animation:slide 1s;
+}
 
-        /* Main Content - Sağ tərəf */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
+@keyframes slide{
+from{transform:translateX(-200px);opacity:0}
+to{transform:translateX(0);opacity:1}
+}
 
-        /* Qeydiyyat düymələri */
-        .auth-bar {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-bottom: 40px;
-        }
+.sidebar button{
+background:#9b59ff;
+border:none;
+padding:12px;
+color:white;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+}
 
-        .btn {
-            padding: 10px 25px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: var(--transition);
-        }
+.sidebar button:hover{
+transform:scale(1.05);
+background:#c77dff;
+}
 
-        .btn-login {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
+.main{
+flex:1;
+padding:30px;
+overflow:auto;
+}
 
-        .btn-login:hover { background: rgba(255,255,255,0.1); }
+.title{
+font-size:28px;
+margin-bottom:20px;
+}
 
-        .btn-signup {
-            background: var(--purple-button);
-            color: white;
-            box-shadow: 0 4px 10px rgba(123, 0, 204, 0.4);
-        }
+.panel{
+background:rgba(255,255,255,0.1);
+border-radius:15px;
+padding:20px;
+margin-bottom:20px;
+animation:fade .7s;
+}
 
-        .btn-signup:hover { background: #9120e2; }
+@keyframes fade{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
+}
 
-        /* Başlıq */
-        .page-header {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: white;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
+input,textarea{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+margin-top:10px;
+}
 
-        /* Seçim Kateqoriyaları Paneli */
-        .options-panel {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-out;
-        }
+.generate{
+background:#b084ff;
+border:none;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+cursor:pointer;
+}
 
-        .option-button {
-            flex: 1;
-            max-width: 200px;
-            padding: 15px;
-            border-radius: 10px;
-            background-color: var(--purple-button);
-            border: 2px solid transparent;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-            transition: var(--transition);
-        }
+.images{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:10px;
+margin-top:20px;
+}
 
-        .option-button:hover {
-            transform: translateY(-5px);
-            background-color: #9120e2;
-        }
+.images img{
+width:100%;
+border-radius:10px;
+transition:.4s;
+}
 
-        .option-button.active {
-            background-color: white;
-            color: var(--purple-main);
-            border: 2px solid var(--purple-button);
-            font-weight: bold;
-        }
+.images img:hover{
+transform:scale(1.05);
+}
 
-        /* Şəkil Qalereyası Grid */
-        .gallery-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+.chatbox{
+height:300px;
+overflow:auto;
+background:rgba(0,0,0,0.3);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 10px;
-            animation: fadeIn 1s ease-out;
-        }
+.msg{
+margin:6px 0;
+}
 
-        .gallery-grid-3x4 {
-            grid-template-columns: repeat(4, 1fr);
-            width: 80%;
-        }
-
-        .gallery-grid-2x5 {
-            grid-template-columns: repeat(5, 1fr);
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-            transition: var(--transition);
-            background: rgba(0,0,0,0.5);
-            aspect-ratio: 1;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            opacity: 0; /* Load olana qədər gizli */
-            transition: opacity 0.5s ease-in;
-        }
-
-        .gallery-item img.loaded {
-            opacity: 1;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 20px rgba(123, 0, 204, 0.6);
-        }
-
-        /* Çat sahəsi */
-        .chat-container {
-            flex: 1;
-            background: rgba(0,0,0,0.6);
-            border-radius: 15px;
-            border: 1px solid var(--purple-button);
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 100%;
-            animation: fadeIn 1.2s ease-out;
-        }
-
-        #chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            max-width: 80%;
-            display: inline-block;
-            animation: slideInMessage 0.3s ease-out;
-        }
-
-        .user-message {
-            background-color: var(--purple-button);
-            align-self: flex-end;
-            text-align: right;
-            float: right;
-            clear: both;
-        }
-
-        .bot-message {
-            background-color: rgba(255,255,255,0.1);
-            align-self: flex-start;
-            text-align: left;
-            float: left;
-            clear: both;
-        }
-
-        .chat-input-area {
-            display: flex;
-            padding: 15px;
-            background: rgba(0,0,0,0.4);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        #chat-input {
-            flex: 1;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border: none;
-            border-radius: 20px;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            margin-right: 10px;
-        }
-
-        #chat-input::placeholder { color: #aaa; }
-
-        .btn-send {
-            background-color: var(--purple-button);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-send:hover { transform: scale(1.1); background-color: #9120e2; }
-
-        /* Arxa plan animasiya */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideInMessage { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    </style>
+</style>
 </head>
+
 <body>
 
-    <div class="sidebar">
-        <div class="sidebar-item" id="nav-profile"><i class="fas fa-user-circle"></i></div>
-        <div class="sidebar-item" id="nav-create"><i class="fas fa-plus-circle"></i></div>
-        <div class="sidebar-item" id="nav-gallery"><i class="fas fa-images"></i></div>
-        <div class="sidebar-item" id="nav-chat"><i class="fas fa-comment-dots"></i></div>
-    </div>
+<div id="app">
 
-    <div class="main-content">
-        <div class="auth-bar">
-            <button class="btn btn-login">Login</button>
-            <button class="btn btn-signup">Sign Up</button>
-        </div>
+<div class="sidebar">
 
-        <div id="content-area">
-            </div>
+<h2>Cute AI</h2>
 
-    </div>
+<button onclick="show('profile')">Profile</button>
+<button onclick="show('create')">Create</button>
+<button onclick="show('gallery')">Gallery</button>
+<button onclick="show('chat')">Chat</button>
 
-    <script>
-        // --- MƏLUMAT BAZASI (CUTE / ŞİRİN ŞƏKİLLƏR) ---
-        const imageDB = {
-            anime: [
-                "https://cdn.pixabay.com/photo/2023/11/24/11/47/anime-girl-8409944_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/07/22/09/04/anime-girl-8142959_640.png",
-                "https://cdn.pixabay.com/photo/2023/11/20/14/08/ai-generated-8401341_640.png",
-                "https://cdn.pixabay.com/photo/2024/02/10/20/38/anime-girl-8565416_640.png",
-                "https://cdn.pixabay.com/photo/2024/01/01/00/39/anime-8480358_640.png",
-                "https://cdn.pixabay.com/photo/2023/11/04/18/12/anime-girl-8365448_640.png",
-                "https://cdn.pixabay.com/photo/2023/12/28/19/21/anime-8474686_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/12/10/11/49/ai-generated-8441198_640.png",
-                "https://cdn.pixabay.com/photo/2023/11/20/14/06/ai-generated-8401323_640.png",
-                "https://cdn.pixabay.com/photo/2023/07/22/09/04/ai-generated-8142953_640.png"
-            ],
-            fantasy: [
-                // Hinata, Tsunade, Sakura
-                "https://i.pinimg.com/736x/88/50/a8/8850a80e1a14f48b0c8b3e8b0b925f38.jpg",
-                "https://i.pinimg.com/originals/94/a3/52/94a35205b38d72855f44da5a805a8d4a.jpg",
-                "https://i.pinimg.com/originals/2d/7e/6a/2d7e6ae229497e70eb37497d31210955.jpg",
-                // 7 əlavə cute fantasy
-                "https://cdn.pixabay.com/photo/2024/02/21/08/33/ai-generated-8587123_640.png",
-                "https://cdn.pixabay.com/photo/2024/01/06/20/54/ai-generated-8492061_640.png",
-                "https://cdn.pixabay.com/photo/2023/04/16/09/08/ai-generated-7929457_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/11/20/14/07/ai-generated-8401334_640.png",
-                "https://cdn.pixabay.com/photo/2024/01/24/07/11/ai-generated-8529061_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/11/20/14/08/ai-generated-8401344_640.png",
-                "https://cdn.pixabay.com/photo/2023/04/16/09/10/ai-generated-7929467_640.jpg"
-            ],
-            real: [
-                "https://cdn.pixabay.com/photo/2023/08/01/17/38/portrait-8163539_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/08/17/20/08/girl-8197177_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/08/04/06/17/ai-generated-8168536_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/09/25/11/32/ai-generated-8274719_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/08/01/11/30/ai-generated-8162817_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/11/17/17/36/ai-generated-8394668_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/10/26/18/31/portrait-8343336_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/09/27/12/37/girl-8279480_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/11/17/17/36/ai-generated-8394669_640.jpg",
-                "https://cdn.pixabay.com/photo/2023/08/17/21/28/ai-generated-8197277_640.jpg"
-            ]
-        };
+</div>
 
-        // --- AZƏRBAYCAN DİLİNDƏ ÇAT LOGİKASI ---
-        const botResponses = {
-            "salam": "Salam! Necəsən? Bu gün sənə nə yaradaraq kömək edə bilərəm?",
-            "necəsən": "Təşəkkür edirəm, mən bir süni intellektəm və həmişə işə hazıram! Sən necəsən?",
-            "nə edirsən": "Hazırda sənin istəklərini dinləyirəm və şəkilləri tənzimləyirəm. Sən nəsə yaratmaq istəyirsən?",
-            "yarad": "Hemen! Hansı kateqoriyanı seçək: Gerçək, Anime, yoxsa Fantaziya?",
-            "real": "Gerçəkçi şəkillərimizi Qalereyada görə bilərsən. Sizin üçün 10 ədəd şirin gerçək insan şəkli hazırlamışam!",
-            "anime": "Anime kateqoriyasını mən də sevirəm! 10 ədəd ən məşhur və şirin anime qızının şəkli qalereyada səni gözləyir.",
-            "fantaziya": "Möhtəşəm seçim! Hinata, Sakura, Tsunade və digər 7 şirin fantaziya xarakterini hazırlamışam.",
-            "fantazi": "Möhtəşəm seçim! Hinata, Sakura, Tsunade və digər 7 şirin fantaziya xarakterini hazırlamışam.",
-            "sexy": "Mənim tənzimləmələrimə görə yalnız 'cute' (şirin) şəkillər yaradıram. Buyurun, şirin şəkillərə baxın!",
-            "lut": "Bağışlayın, mən yalnız etik və təhlükəsiz məzmunlar (şirin anime/insan şəkilləri) göstərirəm.",
-            "bax": "Qalereya bölməsinə keçib şəkillərə tam baxa bilərsiniz.",
-            "şəkil": "Qalereya bölməsinə keçib şəkillərə tam baxa bilərsiniz.",
-            "sekil": "Qalereya bölməsinə keçib şəkillərə tam baxa bilərsiniz.",
-            "sağ ol": "Xoş idi! Yenidən gözləyirəm.",
-            "tesekkur": "Mən təşəkkür edirəm! Sənin üçün buradayam.",
-            "təşəkkür": "Mən təşəkkür edirəm! Sənin üçün buradayam."
-        };
+<div class="main" id="content">
 
-        const defaultResponse = "Bağışlayın, bunu tam başa düşmədim. Söhbəti Azərbaycanca davam etdirə bilərik, yaxud Qalereyada şəkillərə baxa bilərsiniz.";
+<div class="title">Welcome</div>
 
-        // --- JS INTERFEYS IDARƏETMƏSİ ---
-        const contentArea = document.getElementById('content-area');
+<div class="panel">
+Cute Anime AI Generator
+</div>
 
-        function clearContent() { contentArea.innerHTML = ''; }
+</div>
 
-        // Şəkil Qalereyasını göstərən funksiya
-        function showGallery(category = 'anime') {
-            clearContent();
-            contentArea.innerHTML = `
-                <div class="page-header">Kateqoriya Seçin</div>
-                <div class="options-panel">
-                    <div class="option-button ${category === 'real' ? 'active' : ''}" onclick="showGallery('real')">Gerçək</div>
-                    <div class="option-button ${category === 'anime' ? 'active' : ''}" onclick="showGallery('anime')">Anime</div>
-                    <div class="option-button ${category === 'fantasy' ? 'active' : ''}" onclick="showGallery('fantasy')">Fantaziya</div>
-                </div>
-                <div class="gallery-container">
-                    <div class="gallery-grid ${category === 'fantasy' ? 'gallery-grid-3x4' : 'gallery-grid-2x5'}" id="grid">
-                        </div>
-                </div>
-            `;
-            
-            const grid = document.getElementById('grid');
-            const images = imageDB[category];
-            images.forEach(src => {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = `Cute ${category}`;
-                
-                // Şəkil tam yükləndikdən sonra göstər (animasiya üçün)
-                img.onload = () => img.classList.add('loaded');
-                
-                item.appendChild(img);
-                grid.appendChild(item);
-            });
-        }
+</div>
 
-        // Çat interfeysini göstərən funksiya
-        function showChat() {
-            clearContent();
-            contentArea.innerHTML = `
-                <div class="page-header">Süni İntellekt Çat</div>
-                <div class="chat-container">
-                    <div id="chat-messages">
-                        <div class="message bot-message">Salam! Azəri Studio-ya xoş gəlmisən. Mənimlə Azərbaycanca danışa bilərsən. Necəsən?</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chat-input" placeholder="Mesajınızı bura yazın...">
-                        <button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            `;
-            // Enter düyməsini dinləmək
-            document.getElementById('chat-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendMessage();
-            });
-        }
+<script>
 
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const messages = document.getElementById('chat-messages');
-            const text = input.value.trim().toLowerCase();
+function show(page){
 
-            if (text === '') return;
+if(page==="profile"){
+content.innerHTML=`
+<div class="title">Profile</div>
 
-            // İstifadəçi mesajını əlavə et
-            messages.innerHTML += `<div class="message user-message">${text}</div>`;
-            input.value = '';
-            
-            // Botun cavabı (kiçik fasilə ilə)
-            setTimeout(() => {
-                let responseText = defaultResponse;
+<div class="panel">
 
-                // Açar sözləri yoxla (Sadələşdirilmiş analiz)
-                for (const key in botResponses) {
-                    if (text.includes(key)) {
-                        responseText = botResponses[key];
-                        break; // İlk tapılan açar sözdə dayan
-                    }
-                }
+Login / Sign Up
 
-                messages.innerHTML += `<div class="message bot-message">${responseText}</div>`;
-                messages.scrollTop = messages.scrollHeight; // Avtomatik aşağı sürüşdür
-            }, 600);
-        }
+<input placeholder="Username">
+<input placeholder="Password" type="password">
 
-        // --- SIDEBAR NAVİQASİYASI ---
-        document.getElementById('nav-create').addEventListener('click', () => showGallery('anime'));
-        document.getElementById('nav-gallery').addEventListener('click', () => showGallery('anime'));
-        document.getElementById('nav-chat').addEventListener('click', showChat);
-        document.getElementById('nav-profile').addEventListener('click', () => alert('Profil bölməsi hələ hazır deyil!'));
+<button class="generate">Login</button>
+<button class="generate">Sign Up</button>
 
-        // Sayt yüklənəndə qalereyanı göstər (Hədəf səhifə)
-        showGallery('anime');
+</div>
+`
+}
 
-    </script>
+if(page==="create"){
+content.innerHTML=`
+<div class="title">Create Image</div>
+
+<div class="panel">
+
+<select id="type">
+<option>Real</option>
+<option>Anime</option>
+<option>Fantasy</option>
+</select>
+
+<textarea id="prompt" placeholder="Prompt yaz..."></textarea>
+
+<button class="generate" onclick="generate()">Generate</button>
+
+<div class="images" id="result"></div>
+
+</div>
+`
+}
+
+if(page==="gallery"){
+content.innerHTML=`
+<div class="title">Gallery</div>
+
+<div class="panel">
+<div class="images">
+
+<img src="https://picsum.photos/200?1">
+<img src="https://picsum.photos/200?2">
+<img src="https://picsum.photos/200?3">
+<img src="https://picsum.photos/200?4">
+<img src="https://picsum.photos/200?5">
+<img src="https://picsum.photos/200?6">
+<img src="https://picsum.photos/200?7">
+<img src="https://picsum.photos/200?8">
+<img src="https://picsum.photos/200?9">
+<img src="https://picsum.photos/200?10">
+
+</div>
+</div>
+`
+}
+
+if(page==="chat"){
+content.innerHTML=`
+<div class="title">AI Chat</div>
+
+<div class="panel">
+
+<div class="chatbox" id="chatbox"></div>
+
+<input id="msg">
+<button class="generate" onclick="send()">Send</button>
+
+</div>
+`
+}
+
+}
+
+function generate(){
+
+let p=document.getElementById("prompt").value
+let r=document.getElementById("result")
+
+r.innerHTML=""
+
+for(let i=0;i<10;i++){
+
+let img=document.createElement("img")
+img.src="https://picsum.photos/300?random="+Math.random()
+
+r.appendChild(img)
+
+}
+
+}
+
+function send(){
+
+let m=document.getElementById("msg").value
+let box=document.getElementById("chatbox")
+
+box.innerHTML+=`<div class='msg'><b>Sen:</b> ${m}</div>`
+
+let reply="Bunu maraqlı sual hesab edirəm."
+
+if(m.includes("salam")) reply="Salam! Necə kömək edə bilərəm?"
+if(m.includes("anime")) reply="Anime şəkilləri create bölməsindən yarada bilərsən."
+if(m.includes("AI")) reply="AI şəkil generatoru prompt ilə işləyir."
+
+box.innerHTML+=`<div class='msg'><b>AI:</b> ${reply}</div>`
+
+box.scrollTop=box.scrollHeight
+
+}
+
+</script>
+
 </body>
 </html>
