@@ -205,8 +205,6 @@ body.dark-mode #theme-toggle {
     box-shadow: 0 0 20px rgba(255,107,129,0.5);
 }
 </style>
-<!-- END SECOND PART OF SITE CODE -->
-<!-- BEGIN SECOND + THIRD PART OF SITE CODE -->
 <script>
 // --- Chat funksionallığı (davamı) ---
 const chatHistory = [];
